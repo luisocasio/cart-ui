@@ -1,4 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+import Cart from "./component/Cart/Cart";
+import ItemsList from "./component/Items/ItemsList";
+import Search from "./component/Search/Search";
+import SearchList from "./component/Search/SearchList";
 
 const itemsArr = [
   {
@@ -27,84 +31,71 @@ const itemsArr = [
   },
   {
     id: 5,
+    name: "lemon",
+    description: "This is a kinda sour lemon",
+    price: 3.99,
+  },
+  {
+    id: 6,
+    name: "raspberry",
+    description: "This is a kinda raspberry",
+    price: 2.99,
+  },
+  {
+    id: 7,
+    name: "guava",
+    description: "This is a kinda guava",
+    price: 8.99,
+  },
+  {
+    id: 8,
+    name: "plum",
+    description: "This is a kinda plum",
+    price: 6.99,
+  },
+  {
+    id: 9,
     name: "kiwi",
     description: "This is a kinda kiwi",
-    price: 4.99,
+    price: 2.99,
+  },
+  {
+    id: 10,
+    name: "melon",
+    description: "This is a kinda melon",
+    price: 1.99,
   },
 ];
 
-function sortByCost(items) {
-  return items.sort((a, b) => a.price - b.price);
-}
-
-function DisplayItems() {
-  const [items, setItems] = useState([]);
-  const [input, setInput] = useState("");
-  const [search, setSearch] = useState("");
-
-  const ref = useRef("");
-
-  function handleSearch(e) {
-    e.preventDefault();
-    setSearch(ref.current.value);
-    setInput("");
-  }
-
-  function handleSortByCost() {
-    const sortedItems = sortByCost(itemsArr);
-    setItems(() => [...sortedItems]);
-  }
-
-  function handleSortByName() {
-    const sortedItems = itemsArr.sort((a, b) => a.name.localeCompare(b.name));
-    setItems(() => [...sortedItems]);
-  }
-
-  useEffect(() => {
-    setItems(itemsArr);
-  }, [items]);
-
-  return (
-    <div>
-      <h1>Search a Fruit</h1>
-      <form onSubmit={handleSearch}>
-        <input
-          type="text"
-          placeholder="Search for item"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          ref={ref}
-        />
-        <button onClick={handleSearch} type="submit">
-          Search
-        </button>
-      </form>
-
-      <div>
-        {search === ""
-          ? null
-          : items
-              .filter((item) => item.name.includes(search))
-              .map((item) => (
-                <div key={item.id}>
-                  <h2>{item.name}</h2>
-                  <p>{item.description}</p>
-                  <p>{item.price}</p>
-                </div>
-              ))}
-      </div>
-
-      <button onClick={handleSortByCost}>Filter by cost</button>
-      <button onClick={handleSortByName}>Sort by name</button>
-    </div>
-  );
-}
-
 function App() {
+  const [items] = useState(itemsArr);
+  const [searchList, setSearchList] = useState([]);
+  const [qty, setQty] = useState(0);
+  const [cost, setCost] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
+
   return (
-    <>
-      <DisplayItems />
-    </>
+    <div className="App">
+      <ItemsList
+        items={items}
+        setQty={setQty}
+        setCost={setCost}
+        setCartItems={setCartItems}
+        cartItems={cartItems}
+      />
+      <SearchList searchList={searchList} setSearchList={setSearchList} />
+      <div className="search-cart">
+        <Search items={items} setSearchList={setSearchList} />
+        <Cart
+          qty={qty}
+          cost={cost}
+          cartItems={cartItems}
+          setQty={setQty}
+          setCost={setCost}
+          setCartItems={setCartItems}
+        />
+      </div>
+    </div>
   );
 }
 
