@@ -21,7 +21,7 @@ const Cart = ({ qty, cost, cartItems, setQty, setCost, setCartItems }) => {
           cartItems.map((item) => (
             <div key={item.id} className="cart-item">
               <div className="item-header">
-                <h3>{item.name}</h3>
+                <h3>{item.name.toUpperCase()}</h3>
                 <button
                   onClick={() => handleDelete(item.id)}
                   className="item-delete-button"
